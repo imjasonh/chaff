@@ -40,10 +40,10 @@ chaff registry.biz/my/container/image:latest
 
 # Example
 
-You can build and publish a chaffy image from [`./example/](./example):
+You can build and publish a chaffy image from [`./example/`](./example):
 
 ```
-cd examples/
+cd example/
 docker build -t my-image -f Dockerfile.chaff .
 docker push my-image
 ```
