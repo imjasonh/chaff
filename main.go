@@ -8,8 +8,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
+	"github.com/dustin/go-humanize"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
@@ -69,20 +71,14 @@ func main() {
 				name = filepath.Join(dirname, basename)
 			}
 
-			if _, ok := fileMap[name]; ok {
-				continue
-			}
-
-			// check for a whited out parent directory
-			if inWhiteoutDir(fileMap, name) {
-				if h.Size > 0 {
-					r.files = append(r.files, file{
-						name: name,
-						size: h.Size,
-					})
-					r.count++
-					r.size += h.Size
-				}
+			// check if this file is whited out, or is in a whited out parent directory.
+			if _, ok := fileMap[name]; ok || inWhiteoutDir(fileMap, name) {
+				r.files = append(r.files, file{
+					name: name,
+					size: h.Size,
+				})
+				r.count++
+				r.size += h.Size
 				continue
 			}
 
@@ -93,10 +89,15 @@ func main() {
 	}
 
 	fmt.Println("==== CHAFF REPORT ====")
+	fmt.Println("- layers:", len(ls))
 	fmt.Println("- total chaff files:", r.count)
-	fmt.Println("- total chaff size:", r.size)
+	fmt.Println("- total chaff size:", humanize.Bytes(uint64(r.size)))
+
+	sort.Slice(r.files, func(i, j int) bool { return r.files[i].size > r.files[j].size })
 	for _, f := range r.files {
-		fmt.Printf("--- %s (%d bytes)\n", f.name, f.size)
+		if f.size > 0 {
+			fmt.Printf("--- %s (%s)\n", f.name, humanize.Bytes(uint64(f.size)))
+		}
 	}
 }
 

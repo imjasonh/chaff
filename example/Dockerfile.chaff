@@ -1,0 +1,11 @@
+FROM debian
+
+ADD secret.key .
+RUN rm secret.key
+
+RUN apt-get update
+RUN apt-get install -y \
+    automake \
+    build-essential \
+    curl
+RUN rm -rf /var/lib/apt/lists/*

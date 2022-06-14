@@ -1,0 +1,12 @@
+FROM debian
+
+# Don't include secret.key at all!
+# If you need it during your build, use RUN --mount, e.g.:
+# RUN --mount=type=secret,id=mysecret ./use-secret.sh /run/secrets/mysecret
+
+RUN apt-get update && \
+  apt-get install -y \
+    automake \
+    build-essential \
+    curl && \
+  rm -rf /var/lib/apt/lists/*

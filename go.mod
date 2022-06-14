@@ -2,7 +2,10 @@ module github.com/imjasonh/chaff
 
 go 1.18
 
-require github.com/google/go-containerregistry v0.9.0
+require (
+	github.com/dustin/go-humanize v1.0.0
+	github.com/google/go-containerregistry v0.9.0
+)
 
 require (
 	github.com/docker/cli v20.10.16+incompatible // indirect
