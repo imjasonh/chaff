@@ -53,7 +53,7 @@ $ chaff my-image
 ==== CHAFF REPORT ====
 - layers: 10
 - total chaff files: 219
-- total chaff size: 45 MB
+- total chaff size: 45 MB (9.81%)
 --- random.txt (26 MB)
 --- var/lib/apt/lists/deb.debian.org_debian_dists_bullseye_main_binary-arm64_Packages.lz4 (17 MB)
 --- var/cache/debconf/templates.dat-old (780 kB)
@@ -88,7 +88,7 @@ $ chaff my-image:fixed
 ==== CHAFF REPORT ====
 - layers: 2
 - total chaff files: 187
-- total chaff size: 1.8 MB
+- total chaff size: 1.8 MB (0.42%)
 --- var/cache/debconf/templates.dat (780 kB)
 --- var/cache/debconf/templates.dat-old (780 kB)
 --- var/lib/dpkg/status-old (83 kB)

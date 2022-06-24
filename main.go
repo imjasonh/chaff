@@ -37,6 +37,7 @@ func main() {
 	}
 	fileMap := map[string]bool{}
 	var r report
+	var totalSize int64
 	for i := len(ls) - 1; i >= 0; i-- {
 		l := ls[i]
 
@@ -54,6 +55,8 @@ func main() {
 			if err != nil {
 				log.Fatalf("reading tar: %w", err)
 			}
+
+			totalSize += h.Size
 
 			basename := filepath.Base(h.Name)
 			dirname := filepath.Dir(h.Name)
@@ -91,7 +94,7 @@ func main() {
 	fmt.Println("==== CHAFF REPORT ====")
 	fmt.Println("- layers:", len(ls))
 	fmt.Println("- total chaff files:", r.count)
-	fmt.Println("- total chaff size:", humanize.Bytes(uint64(r.size)))
+	fmt.Println("- total chaff size:", humanize.Bytes(uint64(r.size)), fmt.Sprintf("(%.2f%%)", float64(r.size*100)/float64(totalSize)))
 
 	sort.Slice(r.files, func(i, j int) bool { return r.files[i].size > r.files[j].size })
 	for _, f := range r.files {
