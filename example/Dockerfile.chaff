@@ -3,6 +3,11 @@ FROM debian
 ADD secret.key .
 RUN rm secret.key
 
+RUN head -n 100000 /dev/urandom > random.txt
+RUN head -n 1000 /dev/urandom > random.txt
+RUN head -n 10 /dev/urandom > random.txt
+RUN rm random.txt
+
 RUN apt-get update
 RUN apt-get install -y \
     automake \

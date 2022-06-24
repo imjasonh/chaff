@@ -43,9 +43,7 @@ chaff registry.biz/my/container/image:latest
 You can build and publish a chaffy image from [`./example/`](./example):
 
 ```
-cd example/
-docker build -t my-image -f Dockerfile.chaff .
-docker push my-image
+docker buildx build --push -t my-image -f example/Dockerfile.chaff example
 ```
 
 Then run `chaff` on it to see a report about hidden/deleted files:
@@ -53,13 +51,15 @@ Then run `chaff` on it to see a report about hidden/deleted files:
 ```
 $ chaff my-image
 ==== CHAFF REPORT ====
-- layers: 6
-- total chaff files: 212
-- total chaff size: 19 MB
+- layers: 10
+- total chaff files: 219
+- total chaff size: 45 MB
+--- random.txt (26 MB)
 --- var/lib/apt/lists/deb.debian.org_debian_dists_bullseye_main_binary-arm64_Packages.lz4 (17 MB)
 --- var/cache/debconf/templates.dat-old (780 kB)
 --- var/cache/debconf/templates.dat (780 kB)
---- var/lib/apt/lists/security.debian.org_debian-security_dists_bullseye-security_main_binary-arm64_Packages.lz4 (295 kB)
+--- var/lib/apt/lists/security.debian.org_debian-security_dists_bullseye-security_main_binary-arm64_Packages.lz4 (306 kB)
+--- random.txt (257 kB)
 --- var/lib/apt/lists/deb.debian.org_debian_dists_bullseye_InRelease (116 kB)
 --- var/lib/dpkg/status-old (83 kB)
 --- var/lib/dpkg/status (83 kB)
@@ -67,18 +67,18 @@ $ chaff my-image
 --- var/lib/apt/lists/deb.debian.org_debian_dists_bullseye-updates_InRelease (39 kB)
 --- etc/ld.so.cache (6.3 kB)
 --- var/lib/apt/extended_states (5.6 kB)
---- var/cache/debconf/config.dat (4.8 kB)
 --- var/cache/debconf/config.dat-old (4.8 kB)
+--- var/cache/debconf/config.dat (4.8 kB)
 --- var/log/apt/eipp.log.xz (4.7 kB)
 --- var/lib/apt/lists/deb.debian.org_debian_dists_bullseye-updates_main_binary-arm64_Packages.lz4 (3.9 kB)
+--- random.txt (3.6 kB)
 --- secret.key (82 B)
 ```
 
 You can then rebuild the images without the unnecessary deleted files:
 
 ```
-docker build -t my-image:fixed -f Dockerfile.unchaffed .
-docker push my-image:fixed
+docker buildx build --push -t my-image:fixed -f example/Dockerfile.unchaffed example
 ```
 
 And look for chaff:

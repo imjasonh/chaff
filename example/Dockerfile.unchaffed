@@ -4,6 +4,8 @@ FROM debian
 # If you need it during your build, use RUN --mount, e.g.:
 # RUN --mount=type=secret,id=mysecret ./use-secret.sh /run/secrets/mysecret
 
+# Don't repeatedly write files only to overwrite or delete them!
+
 RUN apt-get update && \
   apt-get install -y \
     automake \
